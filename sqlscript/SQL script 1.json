@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'zhaotest_hozhaobdbj_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [zhaotest_hozhaobdbj_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://hozhaobdbj.dfs.core.windows.net/zhaotest', \n\t)\nGo\n\nCREATE EXTERNAL TABLE externalTableParquet (\n\t[SaleKey] bigint,\n\t[CityKey] bigint,\n\t[CustomerKey] bigint,\n\t[BillToCustomerKey] bigint,\n\t[StockItemKey] bigint,\n\t[InvoiceDateKey] varchar(8000),\n\t[DeliveryDateKey] varchar(8000),\n\t[SalespersonKey] bigint,\n\t[WWIInvoicID] bigint,\n\t[Description] varchar(8000),\n\t[Package] varchar(8000),\n\t[Quantity] bigint,\n\t[UnitPrice] float,\n\t[TaxRate] float,\n\t[TotalExcludingTax] float,\n\t[TaxAmount] float,\n\t[Profit] float,\n\t[TotalIncludingTax] float,\n\t[TotalDryItems] bigint,\n\t[TotalChillerItems] bigint,\n\t[LineageKey] bigint\n\t)\n\tWITH (\n\tLOCATION = 'fact_Sale.parquet',\n\tDATA_SOURCE = [zhaotest_hozhaobdbj_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM externalTableParquet\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "mydatabase",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

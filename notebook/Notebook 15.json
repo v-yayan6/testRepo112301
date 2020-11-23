@@ -1,0 +1,66 @@
+{
+	"name": "Notebook 15",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkmediumpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/236a38d3-13a5-4aa5-98fc-bf8e3bb07edb/resourceGroups/bigdataqa/providers/Microsoft.Synapse/workspaces/bdbj1119ws/bigDataPools/sparkmediumpool",
+				"name": "sparkmediumpool",
+				"type": "Spark",
+				"endpoint": "https://bdbj1119ws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkmediumpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"%%pyspark\n",
+					"blob_account_name = \"azureblobstoragetestqing\"\n",
+					"blob_container_name = \"test01\"\n",
+					"from pyspark.sql import SparkSession\n",
+					"\n",
+					"sc = SparkSession.builder.getOrCreate()\n",
+					"token_library = sc._jvm.com.microsoft.azure.synapse.tokenlibrary.TokenLibrary\n",
+					"blob_sas_token = token_library.getConnectionString(\"AzureBlobStorage111901\")\n",
+					"\n",
+					"spark.conf.set(\n",
+					"    'fs.azure.sas.%s.%s.blob.core.windows.net' % (blob_container_name, blob_account_name),\n",
+					"    blob_sas_token)\r\n",
+					"df = spark.read.load('wasbs://test01@azureblobstoragetestqing.blob.core.windows.net/New folder 1119/test.txt', format='text')\r\n",
+					"df.write.mode(\"overwrite\").saveAsTable(\"default.YourTableName\")"
+				],
+				"attachments": null,
+				"execution_count": 1
+			}
+		]
+	}
+}

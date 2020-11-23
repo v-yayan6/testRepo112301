@@ -1,0 +1,157 @@
+{
+	"name": "tutorial_001",
+	"properties": {
+		"folder": {
+			"name": "New folder"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "scala"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 1: create the path towards your data lake storage folder, we assume that you have used the same container and path names in the sink source\n",
+					"import org.apache.spark.sql.{Dataset, SparkSession}\n",
+					"val adls_path = \"abfss://wwwimporters@ruxuadlsgen2.dfs.core.windows.net/dimension_Customer2/\""
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 2: set the Spark context\n",
+					"spark.conf.set(\"fs.azure.account.auth.type.ruxuadlsgen2.dfs.core.windows.net\",\"SharedKey\")\n",
+					"spark.conf.set(\"fs.azure.account.key.ruxuadlsgen2.dfs.core.windows.net\",\"cqBumdrCqAjKDzfCjWwNljwM/I648JHGuWCy+FbJ4MPCrwO/Agy/IEMq9al4byEWxS8aPsSUeaXUFvvT4WR6IA==\")\n",
+					"\n",
+					"print(\"Remote lake path: \" + adls_path)"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 3: read the customer file name in the  parquet format\n",
+					"val customer = spark.read.parquet(adls_path)\n",
+					"customer.show()"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 4: set the path and settings to connect to the SQL Database (this database is in East US and some small Egress fee might apply)\n",
+					"Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\n",
+					"val jdbcHostname = \"arcadiademo.database.windows.net\"\n",
+					"val jdbcPort = 1433\n",
+					"val jdbcDatabase = \"Arcadia_Private_Preview\"\n",
+					"val jdbcUsername = \"sparkarcadia\"\n",
+					"val jdbcPassword = \"340$Uuxwp7Mcxo7Khy\"\n",
+					"\n",
+					"// Create the JDBC URL without passing in the user and password parameters.\n",
+					"val jdbcUrl = s\"jdbc:sqlserver://${jdbcHostname}:${jdbcPort};database=${jdbcDatabase}\"\n",
+					"\n",
+					"// Create a Properties() object to hold the parameters.\n",
+					"import java.util.Properties\n",
+					"val connectionProperties = new Properties()\n",
+					"\n",
+					"connectionProperties.put(\"user\", s\"${jdbcUsername}\")\n",
+					"connectionProperties.put(\"password\", s\"${jdbcPassword}\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 5: Read  specific columns in Batch the folder from the SQL table and apply some transformation\n",
+					"val facttx = spark.read.jdbc(jdbcUrl, \"SalesLT.SalesOrderHeader\", connectionProperties).\n",
+					"    select(\"CustomerID\",\"TotalDue\").\n",
+					"    groupBy(\"CustomerID\").\n",
+					"    sum(\"TotalDue\").\n",
+					"    toDF(\"CustomerID\", \"TotalDue\").\n",
+					"    orderBy(desc(\"TotalDue\"))"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"facttx.printSchema()"
+				],
+				"execution_count": 25
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"customer.printSchema()"
+				],
+				"execution_count": 26
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 6: Join two dataframes into one new dataframe (Result) to get the revenue per customer name\n",
+					"val result = facttx.join(customer,Seq(\"CustomerID\"),joinType=\"left\").groupBy(\"CompanyName\").sum().select(\"CompanyName\",\"sum(TotalDue)\").toDF(\"Customer_Name\",\"Total_Revenue\")\n",
+					"result.show()"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 6: Join two dataframes into one new dataframe (Result) to get the revenue per customer name\n",
+					"val result = facttx.join(customer,Seq(\"CustomerID\"),joinType=\"left\").select(\"CompanyName\", \"TotalDue\").groupBy(\"CompanyName\").sum().toDF(\"Customer_Name\",\"Total_Revenue\")\n",
+					"result.show()"
+				],
+				"execution_count": 46
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 7: set the path and settings to connect to your SQL Pool in your workspace\n",
+					"Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\n",
+					"val jdbcHostnamedest = \"ruxuworkspace-do-not-delete.database.windows.net\"\n",
+					"val jdbcPortdest = 1433\n",
+					"val jdbcDatabasedest = \"ruxusqlcompute\"\n",
+					"val jdbcUsernamedest = \"sparkarcadia\"\n",
+					"val jdbcPassworddest = \"340$Uuxwp7Mcxo7Khy\"\n",
+					"\n",
+					"// Create the JDBC URL without passing in the user and password parameters.\n",
+					"val jdbcUrldest = s\"jdbc:sqlserver://${jdbcHostnamedest}:${jdbcPortdest};database=${jdbcDatabasedest}\"\n",
+					"\n",
+					"// Create a Properties() object to hold the parameters.\n",
+					"val connectionPropertiesdest = new Properties()\n",
+					"\n",
+					"connectionPropertiesdest.put(\"user\", s\"${jdbcUsernamedest}\")\n",
+					"connectionPropertiesdest.put(\"password\", s\"${jdbcPassworddest}\")"
+				],
+				"execution_count": 53
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 8: Write the dataframe result into a new table (dbo.sales_by_customer) in the SQL Pool  \n",
+					"result.write.option(\"createTableColumnTypes\", \"Customer_Name varchar(80), Total_Revenue decimal(18,2)\").jdbc(jdbcUrldest,\"dbo.sales_by_customer\", connectionPropertiesdest)"
+				],
+				"execution_count": 54
+			}
+		]
+	}
+}

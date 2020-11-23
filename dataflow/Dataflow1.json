@@ -1,12 +1,16 @@
 {
 	"name": "Dataflow1",
 	"properties": {
+		"description": "0000",
+		"folder": {
+			"name": "ooop/mmm"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "SINKParquet1",
+						"referenceName": "InputParquet1119",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,7 +19,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SINKParquet1",
+						"referenceName": "OutputParquet2",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -26,7 +30,7 @@
 					"name": "Sort1"
 				}
 			],
-			"script": "source(output(\n\t\tSaleKey as integer,\n\t\tCityKey as integer,\n\t\tCustomerKey as integer,\n\t\tBillToCustomerKey as integer,\n\t\tStockItemKey as integer,\n\t\tInvoiceDateKey as timestamp,\n\t\tDeliveryDateKey as timestamp,\n\t\tSalespersonKey as integer,\n\t\tWWIInvoicID as integer,\n\t\tDescription as string,\n\t\tPackage as string,\n\t\tQuantity as integer,\n\t\tUnitPrice as double,\n\t\tTaxRate as double,\n\t\tTotalExcludingTax as double,\n\t\tTaxAmount as double,\n\t\tProfit as double,\n\t\tTotalIncludingTax as double,\n\t\tTotalDryItems as integer,\n\t\tTotalChillerItems as integer,\n\t\tLineageKey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> source1\nsource1 sort(asc(SaleKey, true)) ~> Sort1\nSort1 sink(input(\n\t\tSaleKey as integer,\n\t\tCityKey as integer,\n\t\tCustomerKey as integer,\n\t\tBillToCustomerKey as integer,\n\t\tStockItemKey as integer,\n\t\tInvoiceDateKey as timestamp,\n\t\tDeliveryDateKey as timestamp,\n\t\tSalespersonKey as integer,\n\t\tWWIInvoicID as integer,\n\t\tDescription as string,\n\t\tPackage as string,\n\t\tQuantity as integer,\n\t\tUnitPrice as double,\n\t\tTaxRate as double,\n\t\tTotalExcludingTax as double,\n\t\tTaxAmount as double,\n\t\tProfit as double,\n\t\tTotalIncludingTax as double,\n\t\tTotalDryItems as integer,\n\t\tTotalChillerItems as integer,\n\t\tLineageKey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+			"script": "source(output(\n\t\tSaleKey as integer,\n\t\tCityKey as integer,\n\t\tCustomerKey as integer,\n\t\tBillToCustomerKey as integer,\n\t\tStockItemKey as integer,\n\t\tInvoiceDateKey as timestamp,\n\t\tDeliveryDateKey as timestamp,\n\t\tSalespersonKey as integer,\n\t\tWWIInvoicID as integer,\n\t\tDescription as string,\n\t\tPackage as string,\n\t\tQuantity as integer,\n\t\tUnitPrice as double,\n\t\tTaxRate as double,\n\t\tTotalExcludingTax as double,\n\t\tTaxAmount as double,\n\t\tProfit as double,\n\t\tTotalIncludingTax as double,\n\t\tTotalDryItems as integer,\n\t\tTotalChillerItems as integer,\n\t\tLineageKey as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> source1\nsource1 sort(asc(CityKey, true)) ~> Sort1\nSort1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }

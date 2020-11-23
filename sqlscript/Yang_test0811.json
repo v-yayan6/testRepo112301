@@ -1,0 +1,16 @@
+{
+	"name": "Yang_test0811",
+	"properties": {
+		"content": {
+			"query": "-- type your sql script here, we now have intellisense\nCREATE TABLE [dbo].[person]\n(\n id int NOT NULL,\nname char(10) not null,\n age int not null\n)\ngo\n\nInsert into dbo.person values(0,'a',18) go\nInsert into dbo.person values(1,'b',29) go\nInsert into dbo.person values(2,'c',30) go\nInsert into dbo.person values(3,'d',11) go\nInsert into dbo.person values(4,'e',22) go\nInsert into dbo.person values(5,'f',33) go\nInsert into dbo.person values(6,'g',14) go\nInsert into dbo.person values(7,'h',25) go\nInsert into dbo.person values(8,'i',36) go\nInsert into dbo.person values(9,'j',17) go\nInsert into dbo.person values(10,'k',28) go\nInsert into dbo.person values(11,'l',39) go\nInsert into dbo.person values(12,'m',18) go\nInsert into dbo.person values(13,'n',29) go\nInsert into dbo.person values(14,'o',30) go\nInsert into dbo.person values(15,'p',14) go\nInsert into dbo.person values(16,'q',26) go\nInsert into dbo.person values(17,'r',32) go\nInsert into dbo.person values(18,'s',14) go\nInsert into dbo.person values(19,'t',20) go\nInsert into dbo.person values(20,'u',30) go\nInsert into dbo.person values(21,'v',16) go\nInsert into dbo.person values(22,'w',28) go\nInsert into dbo.person values(23,'x',34) go\nInsert into dbo.person values(24,'y',22) go\nInsert into dbo.person values(25,'z',28) go\n\nSELECT TOP (100) [id]\n,[name]\n,[age]\n FROM [dbo].[person]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "sqlpool",
+				"type": "SqlPool"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

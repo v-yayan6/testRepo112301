@@ -1,0 +1,240 @@
+{
+	"name": "CopyPipeline_1119",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_jc5",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "zhaotest//fact_sale.json"
+					},
+					{
+						"name": "Destination",
+						"value": "zhaotest//fact_Sale.parquet"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['SaleKey']"
+								},
+								"sink": {
+									"name": "SaleKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['CityKey']"
+								},
+								"sink": {
+									"name": "CityKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['CustomerKey']"
+								},
+								"sink": {
+									"name": "CustomerKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BillToCustomerKey']"
+								},
+								"sink": {
+									"name": "BillToCustomerKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['StockItemKey']"
+								},
+								"sink": {
+									"name": "StockItemKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['InvoiceDateKey']"
+								},
+								"sink": {
+									"name": "InvoiceDateKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['DeliveryDateKey']"
+								},
+								"sink": {
+									"name": "DeliveryDateKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['SalespersonKey']"
+								},
+								"sink": {
+									"name": "SalespersonKey"
+								}
+							},
+							{
+								"source": {
+									"path": "$['WWIInvoicID']"
+								},
+								"sink": {
+									"name": "WWIInvoicID"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Description']"
+								},
+								"sink": {
+									"name": "Description"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Package']"
+								},
+								"sink": {
+									"name": "Package"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Quantity']"
+								},
+								"sink": {
+									"name": "Quantity"
+								}
+							},
+							{
+								"source": {
+									"path": "$['UnitPrice']"
+								},
+								"sink": {
+									"name": "UnitPrice"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TaxRate']"
+								},
+								"sink": {
+									"name": "TaxRate"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TotalExcludingTax']"
+								},
+								"sink": {
+									"name": "TotalExcludingTax"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TaxAmount']"
+								},
+								"sink": {
+									"name": "TaxAmount"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Profit']"
+								},
+								"sink": {
+									"name": "Profit"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TotalIncludingTax']"
+								},
+								"sink": {
+									"name": "TotalIncludingTax"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TotalDryItems']"
+								},
+								"sink": {
+									"name": "TotalDryItems"
+								}
+							},
+							{
+								"source": {
+									"path": "$['TotalChillerItems']"
+								},
+								"sink": {
+									"name": "TotalChillerItems"
+								}
+							},
+							{
+								"source": {
+									"path": "$['LineageKey']"
+								},
+								"sink": {
+									"name": "LineageKey"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_jc5",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_jc5",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-19T05:20:10Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

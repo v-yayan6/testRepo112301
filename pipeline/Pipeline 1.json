@@ -1,0 +1,39 @@
+{
+	"name": "Pipeline 1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Parameter_write",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Parameter_write",
+						"type": "NotebookReference"
+					},
+					"parameters": {
+						"a": {
+							"value": "20",
+							"type": "int"
+						},
+						"b": {
+							"value": "50",
+							"type": "int"
+						}
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-19T08:31:47Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

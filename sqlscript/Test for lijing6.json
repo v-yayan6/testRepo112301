@@ -1,0 +1,11 @@
+{
+	"name": "Test for lijing6",
+	"properties": {
+		"content": {
+			"query": "DROP EXTERNAL TABLE [ext].[Date]\nDROP EXTERNAL TABLE [ext].[Geography]\nDROP EXTERNAL TABLE [ext].[HackneyLicense]\nDROP EXTERNAL TABLE [ext].[Medallion]\nDROP EXTERNAL TABLE [ext].[Time]\nDROP EXTERNAL TABLE [ext].[Trip]\nDROP EXTERNAL TABLE [ext].[Weather]\nGO\n\nDROP SCHEMA [ext]\nGO\n\nDROP EXTERNAL FILE FORMAT [compressedcsv]\nDROP EXTERNAL FILE FORMAT [uncompressedcsv]\nGO\n\nDROP EXTERNAL DATA SOURCE [NYTPublic]\nGO\n\nDROP MASTER KEY \nGO",
+			"metadata": {
+				"language": "sql"
+			}
+		}
+	}
+}

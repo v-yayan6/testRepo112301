@@ -1,0 +1,119 @@
+{
+	"name": "Magictest",
+	"properties": {
+		"folder": {
+			"name": "New folder"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "python"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"%lsmagic"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"a = 1\n",
+					"def test():\n",
+					"    b = %time 2\n",
+					"    print(a, b)\n",
+					"test()\n",
+					"a"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%time\n",
+					"import time\n",
+					"time.sleep(.3)"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%capture --no-stderr out\n",
+					"import sys\n",
+					"\n",
+					"def eprint(*args, **kwargs):\n",
+					"    print(*args, file=sys.stderr, **kwargs)\n",
+					"\n",
+					"print('std\\\\out')\n",
+					"eprint('std\\nerr')"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"out.stdout"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%writefile -a abc/test1.txt\n",
+					"test,1\n",
+					"map,2\n",
+					"cool,10\n",
+					"coolest,232"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.csv('abc/test1.csv')\n",
+					"df.show()"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df.show()"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"display(df)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}

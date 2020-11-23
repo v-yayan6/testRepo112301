@@ -1,0 +1,21 @@
+{
+	"name": "OutputParquet2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStoragevvv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "demo_df",
+				"fileSystem": "synapsetest"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

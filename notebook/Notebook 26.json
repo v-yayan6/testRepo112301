@@ -1,0 +1,82 @@
+{
+	"name": "Notebook 26",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkmediumpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/236a38d3-13a5-4aa5-98fc-bf8e3bb07edb/resourceGroups/bigdataqa/providers/Microsoft.Synapse/workspaces/bdbj1119ws/bigDataPools/sparkmediumpool",
+				"name": "sparkmediumpool",
+				"type": "Spark",
+				"endpoint": "https://bdbj1119ws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkmediumpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 2,
+						"chartConfig": {
+							"category": "area",
+							"keys": [
+								"vendorID"
+							],
+							"values": [
+								"tpepPickupDateTime"
+							],
+							"yLabel": "tpepPickupDateTime",
+							"xLabel": "vendorID",
+							"aggregation": "SUM",
+							"aggByBackend": true,
+							"isValid": true,
+							"inValidMsg": null,
+							"stacked": true
+						},
+						"aggData": "{\"tpepPickupDateTime\":{\"1\":10604523045,\"2\":4544797400}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": false
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"df = spark.read.load('abfss://synapsetest@bdbjtestgen2.dfs.core.windows.net/part-00036-tid-210938564719836543-aea5b543-5e83-4a7d-8d31-69f72c50b05d-15156-1.c000.snappy.parquet', format='parquet')\r\n",
+					"display(df.limit(10))"
+				],
+				"attachments": null,
+				"execution_count": null
+			}
+		]
+	}
+}

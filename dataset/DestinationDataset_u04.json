@@ -1,0 +1,21 @@
+{
+	"name": "DestinationDataset_u04",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bdbj1119ws-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "CDT_1123.parquet",
+				"fileSystem": "zhaotest"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

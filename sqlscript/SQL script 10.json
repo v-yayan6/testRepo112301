@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 10",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'nyctlc_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc', \n\t)\nGo\n\nCREATE EXTERNAL TABLE fhv (\n\t[dispatchBaseNum] varchar(8000),\n\t[pickupDateTime] datetime2(7),\n\t[dropOffDateTime] datetime2(7),\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[srFlag] varchar(8000)\n\t)\n\tWITH (\n\tLOCATION = 'fhv/puYear=*/puMonth=*/*.parquet',\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM fhv\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "table1123foryangyang",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

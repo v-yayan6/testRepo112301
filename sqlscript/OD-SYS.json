@@ -1,0 +1,11 @@
+{
+	"name": "OD-SYS",
+	"properties": {
+		"content": {
+			"query": "-- type your sql script here, we now have intellisense\n\nselect * from sys.certificates\nGO\n\nSELECT 1 AS ONE\nGO\n\nSELECT 2 AS TWO\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			}
+		}
+	}
+}

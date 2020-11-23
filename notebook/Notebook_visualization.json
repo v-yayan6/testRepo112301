@@ -1,0 +1,207 @@
+{
+	"name": "Notebook_visualization",
+	"properties": {
+		"folder": {
+			"name": "New folder"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "scala"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"%%sql \n",
+					"SHOW TABLES"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark\n",
+					"display(spark.range(10))\n",
+					"case class MapEntry(key: String, value: Int)\n",
+					"val largeSeries = for (x <- 1 to 5000) yield MapEntry(\"k_%04d\".format(x), x)\n",
+					"val largeDataFrame = sc.parallelize(largeSeries).toDF()\n",
+					"largeDataFrame.registerTempTable(\"largeTable\")\n",
+					"display(spark.sqlContext.sql(\"select * from largeTable\"))"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%pyspark\n",
+					"print(\"this is Python\")\n",
+					"import platform\n",
+					"print(platform.platform())"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val blob_account_name = \"datasetarcadia\"\n",
+					"val blob_container_name = \"wideworldimporters\"\n",
+					"val blob_relative_path = \"dimension_Customer/\"\n",
+					"val blob_sas_token = s\"?sv=2018-03-28&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-07-13T07:32:42Z&st=2019-07-09T23:32:42Z&spr=https&sig=iVpGfb5yLi3pskn3%2Bl%2B1S3SQODcndTHyAhR5W5c7OYM%3D\"\n",
+					"val wasbs_path = s\"wasbs://${blob_container_name}@${blob_account_name}.blob.core.windows.net/${blob_relative_path}\"\n",
+					"spark.conf.set(\"fs.azure.account.key.datasetarcadia.blob.core.windows.net\" , \"k2wTXor/8YikczxgvK2RqcHq3iat7jE2WMxaTXHOfgpluoKlVOjwUjpDKE3xP+Blymx6Ba/VSPSVw33SZqKTyw==\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 2\n",
+					"import org.apache.spark.sql._\n",
+					"import org.apache.spark.sql.types._\n",
+					"val customSchema = (new StructType).\n",
+					"    add(\"Customer_Keyyyyyyyyyyyyyyyyyy\",IntegerType,true).\n",
+					"    add(\"WWI_Customer_ID\",IntegerType,true).\n",
+					"    add(\"Customer\",StringType,true).\n",
+					"    add(\"Bill_To_Customer\",StringType,true).\n",
+					"    add(\"Category\",StringType,true).\n",
+					"    add(\"Buying_Group\",StringType,true).\n",
+					"    add(\"Primary_Contact\",StringType,true).\n",
+					"    add(\"Postal_Code\",IntegerType,true).\n",
+					"    add(\"Valid_From\",DateType,true).\n",
+					"    add(\"Valid_To\",DateType,true).\n",
+					"    add(\"Lineage_Key\",IntegerType,true)"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"# This is markdown code cell.\n",
+					"## This is markdown code cell."
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Cell 3\n",
+					"val dimcustomer = spark.read.option(\"header\", \"true\").option(\"delimiter\",\"|\").schema(customSchema).csv(wasbs_path)\n",
+					"dimcustomer.show()"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"dimcustomer.collect().length"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"display(dimcustomer)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import pandas as pd\n",
+					"df = pd.read_csv(\n",
+					"  \"https://gist.githubusercontent.com/rgbkrk/a7984a8788a73e2afb8fd4b89c8ec6de/raw/db8d1db9f878ed448c3cac3eb3c9c0dc5e80891e/2015.csv\"\n",
+					")\n",
+					"display(df)"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// set all the properties and path towards the SQL Compute you want to access\n",
+					"Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\")\n",
+					"\n",
+					"// val jdbcHostname = \" arcadiaworkspace.database.windows.net\"\n",
+					"//val jdbcPort = 1433\n",
+					"//val jdbcDatabase = \"arcadiadb\"\n",
+					"//val jdbcUsername = \" sparkarcadia\"\n",
+					"//val jdbcPassword = \"340$Uuxwp7Mcxo7Khy\"\n",
+					"\n",
+					"val jdbcHostname = \"a365metastoreprodwestus2.database.windows.net\"\n",
+					"val jdbcPort = 1433\n",
+					"val jdbcDatabase = \"HDInsight_Deployment\"\n",
+					"val jdbcUsername = \"metastorelogin126@a365metastoreprodwestus2.database.windows.net\"\n",
+					"val jdbcPassword = \"340$PsBiq?;@v@^OGDcS!)eAF#bf1(h{wD\"\n",
+					"\n",
+					"// Create the JDBC URL without passing in the user and password parameters.\n",
+					"val jdbcUrl = s\"jdbc:sqlserver://${jdbcHostname}:${jdbcPort};database=${jdbcDatabase}\"\n",
+					"\n",
+					"// Create a Properties() object to hold the parameters.\n",
+					"import java.util.Properties\n",
+					"val connectionProperties = new Properties()\n",
+					"\n",
+					"connectionProperties.put(\"user\", s\"${jdbcUsername}\")\n",
+					"connectionProperties.put(\"password\", s\"${jdbcPassword}\")"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// load the fact table into a dataframe with an aggregate based on the Customer Key and an order by descending importance\n",
+					"val facttx = spark.read.\n",
+					"    jdbc(jdbcUrl, \"AzureRegions\", connectionProperties).show()\n",
+					"\n",
+					"    // groupBy(\"Customer Key\").sum().\n",
+					"    // orderBy(desc(\"sum(Total Excluding Tax)\"))"
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Join the two tables based on two columns whose names are different (Customer Key)\n",
+					"val result = facttx.as('a).\n",
+					"    join(dimcustomer.as('b),$\"a.Customer Key\" === $\"b.Customer_Key\",joinType=\"left\").\n",
+					"    groupBy(\"Customer\").sum().\n",
+					"    select(\"Customer\",\"sum(sum(Total Excluding Tax))\").\n",
+					"    toDF(\"Customer\",\"Sales\")\n",
+					"result.show()"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"// Load the data into a new SQL Compute table and define the column data type\n",
+					"val driverClass = \"com.microsoft.sqlserver.jdbc.SQLServerDriver\"\n",
+					"connectionProperties.setProperty(\"Driver\", driverClass)\n",
+					"result.write.option(\"createTableColumnTypes\", \"Customer varchar(80), Sales decimal(18,2)\").jdbc(jdbcUrl,\"dbo.sales_buyinggroup\", connectionProperties)"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"spark.conf.getAll.filter(_._1.startsWith(\"spark.hadoop.javax.jdo\")).foreach(println)"
+				],
+				"execution_count": 15
+			}
+		]
+	}
+}

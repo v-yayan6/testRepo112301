@@ -1,0 +1,16 @@
+{
+	"name": "SQL script 12",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'citydatacontainer_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [citydatacontainer_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/citydatacontainer', \n\t)\nGo\n\nCREATE EXTERNAL TABLE chicago (\n\t[dataType] varchar(8000),\n\t[dataSubtype] varchar(8000),\n\t[dateTime] datetime2(7),\n\t[category] varchar(8000),\n\t[subcategory] varchar(8000),\n\t[status] varchar(8000),\n\t[address] varchar(8000),\n\t[latitude] float,\n\t[longitude] float,\n\t[source] varchar(8000),\n\t[extendedProperties] varchar(8000)\n\t)\n\tWITH (\n\tLOCATION = 'Safety/Release/city=Chicago/*.parquet',\n\tDATA_SOURCE = [citydatacontainer_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM chicago\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "[teston1119]",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

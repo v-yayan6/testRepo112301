@@ -1,0 +1,11 @@
+{
+	"name": "sql script from ts",
+	"properties": {
+		"content": {
+			"query": "with fact_Order as\n(\nSELECT *\nFROM \nOPENROWSET(\nBULK 'https://pierowebtooling1.dfs.core.windows.net/inbound/Parquet/Fact_Order/*.parquet', \nFORMAT='PARQUET'\n) AS Fact_Order\n)\n, dimension_City as\n(\nSELECT *\nFROM \nOPENROWSET(\nBULK 'https://pierowebtooling1.dfs.core.windows.net/inbound/Parquet/Dimension_City/*.parquet', \nFORMAT='PARQUET'\n) AS dimension_City \n)\nSelect top 100 t2.[City],\nCount(t1.OrderKey) as OrderCount, \nSum(TotalIncludingTax) as TotalIncludingTax, \nAVG(UnitPrice) as AvgUnitPrice, \ncase when Sum(TotalIncludingTax)<20000 then '0~20000' else '>20000' end as TotalRank\nfrom Fact_Order as t1 left join Dimension_City as t2 on t1.[CityKey]=t2.[CityKey]\nwhere t2.[City] not in ('Ewen','Pastura')  and t2.[City] not like 'a%'\nGroup by t2.[City]\nHaving  Sum(TotalIncludingTax)>=10000 and Count(t1.OrderKey) between 100 and 1000\norder by Sum(TotalIncludingTax) desc\n\n\n",
+			"metadata": {
+				"language": "sql"
+			}
+		}
+	}
+}

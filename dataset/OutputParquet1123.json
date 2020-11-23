@@ -1,0 +1,34 @@
+{
+	"name": "OutputParquet1123",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage112303",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "mnt",
+				"fileSystem": "synapsetest"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "TOWNNAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "AREACODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "BROADREGION",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

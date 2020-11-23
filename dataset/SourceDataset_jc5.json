@@ -1,0 +1,87 @@
+{
+	"name": "SourceDataset_jc5",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bdbj1119ws-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "fact_sale.json",
+				"fileSystem": "zhaotest"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"SaleKey": {
+					"type": "integer"
+				},
+				"CityKey": {
+					"type": "integer"
+				},
+				"CustomerKey": {
+					"type": "integer"
+				},
+				"BillToCustomerKey": {
+					"type": "integer"
+				},
+				"StockItemKey": {
+					"type": "integer"
+				},
+				"InvoiceDateKey": {
+					"type": "string"
+				},
+				"DeliveryDateKey": {
+					"type": "string"
+				},
+				"SalespersonKey": {
+					"type": "integer"
+				},
+				"WWIInvoicID": {
+					"type": "integer"
+				},
+				"Description": {
+					"type": "string"
+				},
+				"Package": {
+					"type": "string"
+				},
+				"Quantity": {
+					"type": "integer"
+				},
+				"UnitPrice": {
+					"type": "number"
+				},
+				"TaxRate": {
+					"type": "number"
+				},
+				"TotalExcludingTax": {
+					"type": "number"
+				},
+				"TaxAmount": {
+					"type": "number"
+				},
+				"Profit": {
+					"type": "number"
+				},
+				"TotalIncludingTax": {
+					"type": "number"
+				},
+				"TotalDryItems": {
+					"type": "integer"
+				},
+				"TotalChillerItems": {
+					"type": "integer"
+				},
+				"LineageKey": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}
