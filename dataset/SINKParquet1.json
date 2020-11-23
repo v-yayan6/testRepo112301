@@ -1,0 +1,20 @@
+{
+	"name": "SINKParquet1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1000",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "parquet",
+				"fileSystem": "synapsetest"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
