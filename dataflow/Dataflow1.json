@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SOURCEParquet1",
+						"referenceName": "SINKParquet1",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
