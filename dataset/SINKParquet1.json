@@ -15,6 +15,91 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "SaleKey",
+				"type": "INT32"
+			},
+			{
+				"name": "CityKey",
+				"type": "INT32"
+			},
+			{
+				"name": "CustomerKey",
+				"type": "INT32"
+			},
+			{
+				"name": "BillToCustomerKey",
+				"type": "INT32"
+			},
+			{
+				"name": "StockItemKey",
+				"type": "INT32"
+			},
+			{
+				"name": "InvoiceDateKey",
+				"type": "INT96"
+			},
+			{
+				"name": "DeliveryDateKey",
+				"type": "INT96"
+			},
+			{
+				"name": "SalespersonKey",
+				"type": "INT32"
+			},
+			{
+				"name": "WWIInvoicID",
+				"type": "INT32"
+			},
+			{
+				"name": "Description",
+				"type": "UTF8"
+			},
+			{
+				"name": "Package",
+				"type": "UTF8"
+			},
+			{
+				"name": "Quantity",
+				"type": "INT32"
+			},
+			{
+				"name": "UnitPrice",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TaxRate",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TotalExcludingTax",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TaxAmount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Profit",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TotalIncludingTax",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TotalDryItems",
+				"type": "INT32"
+			},
+			{
+				"name": "TotalChillerItems",
+				"type": "INT32"
+			},
+			{
+				"name": "LineageKey",
+				"type": "INT32"
+			}
+		]
 	}
 }
