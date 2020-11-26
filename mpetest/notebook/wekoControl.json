@@ -1,0 +1,88 @@
+{
+	"name": "wekoControl",
+	"properties": {
+		"folder": {
+			"name": "weko"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "origin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Synapse/workspaces/ltianscusworkspace/bigDataPools/origin",
+				"name": "origin",
+				"type": "Spark",
+				"endpoint": "https://ltianscusworkspace.dev.azuresynapse-dogfood.net/livyApi/versions/2019-11-01-preview/sparkPools/origin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.functions import countDistinct, col, count, when\n",
+					"\n",
+					"\n",
+					"for n in range(10):\n",
+					"    df = spark.range(0, 20000000 + n)\n",
+					"    columns = [countDistinct(col(c)).alias(c) for c in df.columns]\n",
+					"    df.select(columns).collect()"
+				],
+				"attachments": null,
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": true
+				},
+				"source": [
+					"import os\n",
+					"nowtime = os.popen('cat /usr/hdp/current/spark2-client/RELEASE')\n",
+					"print(nowtime.read())"
+				],
+				"attachments": null,
+				"execution_count": 2
+			}
+		]
+	}
+}

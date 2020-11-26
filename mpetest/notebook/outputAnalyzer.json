@@ -1,0 +1,214 @@
+{
+	"name": "outputAnalyzer",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"language_info": {
+				"name": "scala"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## 0. Set the output location\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"//please replace the tagName in the path below for further analysis.\\nval baseOutputPath = \\\"abfs://runresultstorage@tpcdsperfresults.dfs.core.windows.net/ayushifilescan1/sf_1000/\\\"\\nval sparkConfPath = baseOutputPath + \\\"confJson\\\"\\nval queryMetricsPath = baseOutputPath + \\\"query-metrics/\\\"\\nval sparkEventsPath = baseOutputPath + \\\"spark-events/\\\"\\nval systemMetricsSummary = baseOutputPath + \\\"/summary/system-metrics-summary/\\\"\","
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"//please replace the tagName in the path below for further analysis.\n",
+					"val baseOutputPath = \"abfs://runresultstorage@tpcdsperfresults.dfs.core.windows.net/ayushifilescan1/sf_1000/\"\n",
+					"val sparkConfPath = baseOutputPath + \"confJson\"\n",
+					"val queryMetricsPath = baseOutputPath + \"query-metrics/\"\n",
+					"val sparkEventsPath = baseOutputPath + \"spark-events/\"\n",
+					"val systemMetricsSummary = baseOutputPath + \"/summary/system-metrics-summary/\""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## 1. Spark Configurations\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val sparkConf = spark.read.json(sparkConfPath)\\nsparkConf.select(\"spark.`spark.driver.cores`\", \"hadoop.`dfs.heartbeat.interval`\" ).show()"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## 2. queryMetrics: Get Query execution times\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"case class Query(\n",
+					"    queryId: String,\n",
+					"    runId: Long,\n",
+					"    startTime: Long,\n",
+					"    endTime:Long,\n",
+					"    executionTimeMs: Long,\n",
+					"    queryResultValidationSuccess: Boolean,\n",
+					"    fileScanTimeMs: Long\n",
+					"    )\n",
+					"    \n",
+					"    val queryMetrics = spark.read.option(\"basePath\", queryMetricsPath).json(s\"${queryMetricsPath}/*/**\")\n",
+					"    val query = queryMetrics.select(\n",
+					"        $\"queryId\",\n",
+					"        $\"runId\",\n",
+					"        $\"queryResultValidationSuccess\",\n",
+					"        $\"runtimes.startTime\".alias(\"startTime\"),\n",
+					"        $\"runTimes.endTime\".alias(\"endTime\"),\n",
+					"        $\"runTimes.executionTimeMs\".alias(\"executionTimeMs\"),\n",
+					"        $\"fileScanTimeMs\".alias(\"fileScanTimeMs\")\n",
+					"        ).as[Query]\n",
+					"        \n",
+					"    queryMetrics.show(5)\n",
+					"    query.createOrReplaceTempView(\"query\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%sql\n",
+					"SELECT queryId, min(executionTimeMs), max(executionTimeMs) from query group by 1 order by 1"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## 3.0 Spark Events \n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val sparkEvents = spark.read.option(\"basePath\", sparkEventsPath).json(s\"${sparkEventsPath}/*/**\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## 3.1 Spark Events: Task details\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"case class Task(\n",
+					"    queryId: String,\n",
+					"    runId: Long,\n",
+					"    taskId: Long,\n",
+					"    taskAttemptId: Long,\n",
+					"    stageId: Long,\n",
+					"    stageAttemptId: Long,\n",
+					"    executorId: String,\n",
+					"    host: String,\n",
+					"    startTime: Long,\n",
+					"    finishTime: Long,\n",
+					"    killed: Boolean,\n",
+					"    failed: Boolean,\n",
+					"    shuffleBytesWritten: Long,\n",
+					"    shuffleBytesRead: Long,\n",
+					"    jvmGCTime: Long,\n",
+					"    memoryBytesSpilled: Long,\n",
+					"    diskBytesSpilled: Long,\n",
+					"    taskType: String,\n",
+					"    locality: String,\n",
+					"    taskEndReason: String,\n",
+					"    fileScanTime: Long)\n",
+					"val taskEvents = sparkEvents.filter($\"Event\" === \"SparkListenerTaskEnd\").select(\n",
+					"    $\"queryId\".alias(\"queryId\"),\n",
+					"    $\"Task Info.Task ID\".alias(\"taskId\"),\n",
+					"    $\"Task Info.Attempt\"alias(\"taskAttemptId\"),\n",
+					"    $\"Stage ID\".alias(\"stageId\"),\n",
+					"    $\"Stage Attempt ID\".alias(\"stageAttemptId\"),\n",
+					"    $\"Task Info.Executor ID\".alias(\"executorId\"),\n",
+					"    $\"Task Info.Host\".alias(\"host\"),\n",
+					"    $\"Task Info.Launch Time\".alias(\"startTime\"),\n",
+					"    $\"Task Info.Finish Time\".alias(\"finishTime\"),\n",
+					"    $\"Task Info.Killed\".alias(\"killed\"),\n",
+					"    $\"Task Info.Failed\".alias(\"failed\"),\n",
+					"    $\"Task Metrics.Shuffle Write Metrics.Shuffle Bytes Written\".alias(\"shuffleBytesWritten\"),\n",
+					"    ($\"Task Metrics.Shuffle Read Metrics.Remote Bytes Read\" + $\"Task Metrics.Shuffle Read Metrics.Local Bytes Read\").alias(\"shuffleBytesRead\\),\n",
+					"    $\"Task Metrics.JVM GC Time\".alias(\"jvmGCTime\"),\n",
+					"    $\"Task Metrics.Memory Bytes Spilled\".alias(\"memoryBytesSpilled\"),\n",
+					"    $\"Task Metrics.Disk Bytes Spilled\".alias(\"diskBytesSpilled\") ,\n",
+					"    $\"Task Type\".alias(\"taskType\"),\n",
+					"    $\"Task Info.Locality\".alias(\"locality\"),\n",
+					"    $\"Task End Reason\".alias(\"taskEndReason\"),\n",
+					"    $\"Task Info.Accumulables.Value\".alias(\"accumulablesValue\"),\n",
+					"    array_position($\"Task Info.Accumulables.Name\", \"scan time total (min, med, max)\").alias(\"fileScanTimeIndex\"))\n",
+					"val task = taskEvents.select(\n",
+					"    $\"queryId\",\n",
+					"    $\"taskId\",\n",
+					"    $\"taskAttemptId\",\n",
+					"    $\"stageId\",\n",
+					"    $\"stageAttemptId\",\n",
+					"    $\"executorId\",\n",
+					"    $\"host\",\n",
+					"    $\"startTime\",\n",
+					"    $\"finishTime\",\n",
+					"    $\"killed\",\n",
+					"    $\"failed\",\n",
+					"    $\"shuffleBytesWritten\",\n",
+					"    $\"shuffleBytesRead\",\n",
+					"    $\"jvmGCTime\",\n",
+					"    $\"memoryBytesSpilled\",\n",
+					"    $\"diskBytesSpilled\",\n",
+					"    $\"taskType\",\n",
+					"    $\"locality\",\n",
+					"    $\"taskEndReason\",\n",
+					"    expr(\"CAST( Case when fileScanTimeIndex = 0 then 0 else element_at(accumulablesValue, CAST(fileScanTimeIndex AS INTEGER)) end AS BIGINT)\").alias(\"fileScanTime\")\n",
+					"    ).as(\"t\").join(query.as(\"q\"), query(\"queryId\") === taskEvents(\"queryId\") &&  query(\"startTime\") < taskEvents(\"startTime\") && query(\"endTime\") > taskEvents(\"finishTime\")).select(\"t.*\", \"q.runId\").as[Task]\n",
+					"task.createOrReplaceTempView(\"task\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%sql\n",
+					"with totalTasks as\n",
+					"(select queryId, runId, count(1) as totalTasks from task group by 1,2 order by 1,2),\n",
+					"successfulTasks as\n",
+					"(select queryId, runId, count(1) as successfulTasks from task where killed = \"false\" and failed = \"false\" group by 1,2 order by 1,2)\n",
+					"select tt.queryId, tt.runId, totalTasks-successfulTasks as failedTasks, successfulTasks from totalTasks tt,successfulTasks st where st.queryId = tt.queryId and st.runId = tt.runId"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}

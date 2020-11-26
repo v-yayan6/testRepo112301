@@ -1,0 +1,73 @@
+{
+	"name": "InputOutputTest",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "xiaolelchange",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Synapse/workspaces/ltianscusworkspace/bigDataPools/xiaolelchange",
+				"name": "xiaolelchange",
+				"type": "Spark",
+				"endpoint": "https://ltianscusworkspace.dev.azuresynapse-dogfood.net/livyApi/versions/2019-11-01-preview/sparkPools/xiaolelchange",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"val rdd = sc.textFile(\"abfss://mydefault@ltianscusgen2.dfs.core.windows.net/xiaolel/test1/part-00004-c914640a-2e14-4687-9f5e-457ba4ebff8f-c000.csv\")\n",
+					"rdd.count"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"rdd.saveAsTextFile(\"/test/output\")"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val another = spark.read.csv(\"abfss://mydefault@ltianscusgen2.dfs.core.windows.net/xiaolel/test1/part-00003-c914640a-2e14-4687-9f5e-457ba4ebff8f-c000.csv\")\n",
+					"another.count"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"another.write.csv(\"/dataframeoutput/test1\")"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}

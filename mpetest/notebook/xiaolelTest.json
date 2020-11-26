@@ -1,0 +1,201 @@
+{
+	"name": "xiaolelTest",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "xiaolelchange",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"language_info": {
+				"name": "scala"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Synapse/workspaces/ltianscusworkspace/bigDataPools/xiaolelchange",
+				"name": "xiaolelchange",
+				"type": "Spark",
+				"endpoint": "https://ltianscusworkspace.dev.azuresynapse-dogfood.net/livyApi/versions/2019-11-01-preview/sparkPools/xiaolelchange",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"println(\"hello spark print!\")"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"throw new Exception(\"Hey Spark Exception\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"throw new Error(\"Hey Spark Error!\")"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"1/0"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"System.err.println(\"Hey Spark Err Println!\")"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"print(\"hello, python print\")"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"raise Exception(\"python exception!!\")"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"1/0"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import sys\n",
+					"sys.stderr.write(\"python stderr write\")"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"sys.env.toList.foreach(println)"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"spark.conf.getAll.foreach(println)"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import scala.collection.JavaConverters._\n",
+					"import scala.collection.immutable.Seq\n",
+					"spark.sparkContext.hadoopConfiguration.asScala.foreach(elem => {\n",
+					"    println(\"\" + elem.getKey() + \" \\t\" + elem.getValue())\n",
+					"})"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import org.apache.log4j.LogManager\n",
+					"val log = LogManager.getRootLogger\n",
+					"val data = spark.range(0, 5)\n",
+					"data.show\n",
+					"log.info(\"test log in driver\")"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import com.microsoft.spark.notebook.visualization.displayHTML\n",
+					"\n",
+					"displayHTML(\"hello world!\")"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import com.microsoft.spark.notebook.visualization.displayHTML\n",
+					"\n",
+					"displayHTML(\"<h1>My First Heading</h1><p>My first paragraph.</p>\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val sessionId = scala.util.Random.nextInt(1000000)\n",
+					"val deltaTablePath = s\"/delta/delta-table-$sessionId\";\n",
+					"val data = spark.range(0, 5)\n",
+					"data.write.format(\"delta\").save(deltaTablePath)"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val another = spark.read.load(deltaTablePath)\n",
+					"another.count"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"another.write.csv(\"/xiaolel/test1\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"val rdd = sc.textFile(\"abfss://mydefault@ltianscusgen2.dfs.core.windows.net/xiaolel/test1/part-00004-c914640a-2e14-4687-9f5e-457ba4ebff8f-c000.csv\")\n",
+					"rdd.count"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"rdd.saveAsTextFile(\"/xiaolel/rddoutputtest\")"
+				],
+				"execution_count": 7
+			}
+		]
+	}
+}

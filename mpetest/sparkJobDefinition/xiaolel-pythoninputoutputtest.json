@@ -1,0 +1,27 @@
+{
+	"name": "xiaolel-pythoninputoutputtest",
+	"properties": {
+		"targetBigDataPool": {
+			"referenceName": "xiaolelchange",
+			"type": "BigDataPoolReference"
+		},
+		"requiredSparkVersion": "2.4",
+		"language": "python",
+		"jobProperties": {
+			"name": "xiaolel-pythoninputoutputtest",
+			"file": "abfss://mydefault@ltianscusgen2.dfs.core.windows.net/synapse/workspaces/ltianscusworkspace/batchjobs/xiaolel-pythoninputoutputtest/testinput.py",
+			"conf": {
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			},
+			"args": [],
+			"jars": [],
+			"files": [],
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		}
+	}
+}

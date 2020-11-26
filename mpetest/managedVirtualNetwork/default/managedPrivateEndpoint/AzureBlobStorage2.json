@@ -1,0 +1,7 @@
+{
+	"name": "AzureBlobStorage2",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/a365-ci/providers/Microsoft.Storage/storageAccounts/a365cidisks",
+		"groupId": "blob"
+	}
+}

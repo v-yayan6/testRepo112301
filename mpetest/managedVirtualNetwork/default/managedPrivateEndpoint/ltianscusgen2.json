@@ -1,0 +1,10 @@
+{
+	"name": "ltianscusgen2",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Storage/storageAccounts/ltianscusgen2",
+		"groupId": "dfs",
+		"fqdns": [
+			"ltianscusgen2.dfs.core.windows.net"
+		]
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sql--ltianscusworkspace",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Synapse/workspaces/ltianscusworkspace",
+		"groupId": "sql",
+		"fqdns": [
+			"ltianscusworkspace.sql.azuresynapse-dogfood.net"
+		]
+	}
+}

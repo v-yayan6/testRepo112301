@@ -1,0 +1,223 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "spark",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/8b3b8a60-1dd0-4824-8770-2ed6a55d8e27/resourceGroups/ltiantestRG/providers/Microsoft.Synapse/workspaces/ltianscusworkspace/bigDataPools/spark",
+				"name": "spark",
+				"type": "Spark",
+				"endpoint": "https://ltianscusworkspace.dev.azuresynapse-dogfood.net/livyApi/versions/2019-11-01-preview/sparkPools/spark",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"import numpy as np\n",
+					"from matplotlib.patches import Circle, Wedge, Polygon\n",
+					"from matplotlib.collections import PatchCollection\n",
+					"import matplotlib.pyplot as plt\n",
+					"\n",
+					"# Fixing random state for reproducibility\n",
+					"np.random.seed(19680801)\n",
+					"\n",
+					"\n",
+					"fig, ax = plt.subplots()\n",
+					"\n",
+					"resolution = 50  # the number of vertices\n",
+					"N = 3\n",
+					"x = np.random.rand(N)\n",
+					"y = np.random.rand(N)\n",
+					"radii = 0.1*np.random.rand(N)\n",
+					"patches = []\n",
+					"for x1, y1, r in zip(x, y, radii):\n",
+					"    circle = Circle((x1, y1), r)\n",
+					"    patches.append(circle)\n",
+					"\n",
+					"x = np.random.rand(N)\n",
+					"y = np.random.rand(N)\n",
+					"radii = 0.1*np.random.rand(N)\n",
+					"theta1 = 360.0*np.random.rand(N)\n",
+					"theta2 = 360.0*np.random.rand(N)\n",
+					"for x1, y1, r, t1, t2 in zip(x, y, radii, theta1, theta2):\n",
+					"    wedge = Wedge((x1, y1), r, t1, t2)\n",
+					"    patches.append(wedge)\n",
+					"\n",
+					"# Some limiting conditions on Wedge\n",
+					"patches += [\n",
+					"    Wedge((.3, .7), .1, 0, 360),             # Full circle\n",
+					"    Wedge((.7, .8), .2, 0, 360, width=0.05),  # Full ring\n",
+					"    Wedge((.8, .3), .2, 0, 45),              # Full sector\n",
+					"    Wedge((.8, .3), .2, 45, 90, width=0.10),  # Ring sector\n",
+					"]\n",
+					"\n",
+					"for i in range(N):\n",
+					"    polygon = Polygon(np.random.rand(N, 2), True)\n",
+					"    patches.append(polygon)\n",
+					"\n",
+					"colors = 100*np.random.rand(len(patches))\n",
+					"p = PatchCollection(patches, alpha=0.4)\n",
+					"p.set_array(np.array(colors))\n",
+					"ax.add_collection(p)\n",
+					"fig.colorbar(p, ax=ax)\n",
+					"\n",
+					"plt.show()"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from notebookutils import display, displayHTML, enableMatplotlib\n",
+					"from notebookutils import mssparkutils"
+				],
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"import matplotlib\n",
+					"import matplotlib.pyplot as plt\n",
+					"from notebookutils.visualization.msInlinePlotlib import MsInLineBackend\n",
+					"if not matplotlib.__version__.startswith(\"3.3\") and (plt._show != MsInLineBackend.show):\n",
+					"    plt._show = MsInLineBackend.show\n",
+					"else:\n",
+					"    pass\n",
+					"plt.plot([1, 2, 3, 4])\n",
+					"plt.show()"
+				],
+				"execution_count": 33
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"displayHTML(\"hello world\")"
+				],
+				"execution_count": 32
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"display.config(\"\")\n",
+					"display(spark.range(1))\n",
+					"display.execute(\"\")"
+				],
+				"execution_count": 31
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"mssparkutils.fs.help()"
+				],
+				"execution_count": 30
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"TokenLibrary = sc._jvm.com.microsoft.azure.synapse.tokenlibrary.TokenLibrary"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark\n",
+					"import com.microsoft.spark.notebook.visualization.{ display, displayHTML }\n",
+					"import com.microsoft.azure.synapse.tokenlibrary.TokenLibrary"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark\n",
+					"displayHTML(\"hello world\")"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark \n",
+					"display.config(\"\")\n",
+					"display(spark.range(1))\n",
+					"display.execute(\"\")"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark \n",
+					"mssparkutils.fs.help()"
+				],
+				"execution_count": 29
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%spark\n",
+					"import com.microsoft.spark.sqlanalytics.utils.Constants\n",
+					"import org.apache.spark.sql.SqlAnalyticsConnector._"
+				],
+				"execution_count": 28
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%csharp\n",
+					"DisplayHTML(\"hello world\");"
+				],
+				"execution_count": 27
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%csharp\n",
+					"DisplayConfig(\"\");\n",
+					"Display(spark.Range(1));\n",
+					"DisplayExecute(\"\");"
+				],
+				"execution_count": 26
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%csharp\n",
+					"FS.Help();"
+				],
+				"execution_count": 25
+			}
+		]
+	}
+}

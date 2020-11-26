@@ -1,0 +1,27 @@
+{
+	"name": "DebugCase6",
+	"properties": {
+		"targetBigDataPool": {
+			"referenceName": "xiaoleltest",
+			"type": "BigDataPoolReference"
+		},
+		"requiredSparkVersion": "2.4",
+		"language": "python",
+		"jobProperties": {
+			"name": "DebugCase6",
+			"file": "abfss://mydefault@ltianwestus2gen2.dfs.core.windows.net/synapse/workspaces/ltianwestus2/batchjobs/DebugCase6/DebugCase6.py",
+			"conf": {
+				"spark.dynamicAllocation.minExecutors": "1",
+				"spark.dynamicAllocation.maxExecutors": "1"
+			},
+			"args": [],
+			"jars": [],
+			"files": [],
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 1
+		}
+	}
+}

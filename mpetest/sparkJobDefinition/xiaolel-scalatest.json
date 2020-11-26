@@ -1,0 +1,24 @@
+{
+	"name": "xiaolel-scalatest",
+	"properties": {
+		"targetBigDataPool": {
+			"referenceName": "mymidsparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"requiredSparkVersion": "2.4",
+		"language": "scala",
+		"jobProperties": {
+			"name": "xiaolel-scalatest",
+			"file": "abfss://mydefault@ltianscusgen2.dfs.core.windows.net/synapse/workspaces/ltianscusworkspace/batchjobs/Spark%20job%20definition%201/debugtest1.jar",
+			"className": "synapse.WasbIOTest",
+			"args": [],
+			"jars": [],
+			"files": [],
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 1
+		}
+	}
+}

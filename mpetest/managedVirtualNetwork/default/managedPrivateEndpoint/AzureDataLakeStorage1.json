@@ -1,0 +1,7 @@
+{
+	"name": "AzureDataLakeStorage1",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/Accessibility/providers/Microsoft.Storage/storageAccounts/accessibilitytest",
+		"groupId": "dfs"
+	}
+}
