@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Parameter_write",
+				"name": "Notebook 1",
 				"type": "SynapseNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -16,24 +16,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "Parameter_write",
+						"referenceName": "Notebook 1",
 						"type": "NotebookReference"
-					},
-					"parameters": {
-						"a": {
-							"value": "20",
-							"type": "int"
-						},
-						"b": {
-							"value": "50",
-							"type": "int"
-						}
 					}
 				}
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2020-11-19T08:31:47Z"
+		"lastPublishTime": "2020-11-23T14:29:25Z"
 	},
 	"type": "Microsoft.Synapse/workspaces/pipelines"
 }

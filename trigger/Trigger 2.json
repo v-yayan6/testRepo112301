@@ -8,8 +8,8 @@
 		"typeProperties": {
 			"recurrence": {
 				"frequency": "Minute",
-				"interval": 10,
-				"startTime": "2020-11-23T13:56:00Z",
+				"interval": 15,
+				"startTime": "2020-11-13T08:01:00Z",
 				"timeZone": "UTC"
 			}
 		}

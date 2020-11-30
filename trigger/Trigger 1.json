@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "CopyPipeline_1119",
+					"referenceName": "Pipeline 1",
 					"type": "PipelineReference"
 				}
 			}
@@ -16,7 +16,7 @@
 			"recurrence": {
 				"frequency": "Minute",
 				"interval": 5,
-				"startTime": "2020-11-19T05:20:00Z",
+				"startTime": "2020-11-13T08:06:00Z",
 				"timeZone": "UTC"
 			}
 		}
